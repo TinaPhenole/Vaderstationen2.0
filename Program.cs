@@ -51,7 +51,7 @@ namespace Vaderstationen_TinaPhenole
                         break;
 
                     case "S" :
-                    //Skriv ut alla mätningar
+                    // Skriv ut alla mätningar
                     Console.WriteLine("Dina tempraturmätningar: ");
                     foreach (double temp in tempratureMesh)
                     {
