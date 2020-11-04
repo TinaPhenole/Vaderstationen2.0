@@ -10,67 +10,89 @@ namespace Vaderstationen_TinaPhenole
         {
             bool showMenu = true;
             List<double> tempratureMesh = new List<double>();
+            // förprogrammerade tempraturer för listan
+            tempratureMesh.Add(10);
+            tempratureMesh.Add(15.5);
+            tempratureMesh.Add(11.9);
+            tempratureMesh.Add(9.4);
+
             while (showMenu)
             {
-                showMenu = MainMenu();
-            }
-            // Meny 
-            static bool MainMenu()
-            {
+                // Lägg till några förinsatta tempraturer
                 Console.Clear();
                 Console.WriteLine("[L]ägg till mätning");
                 Console.WriteLine("[S]kriv ut alla mätningar");
                 Console.WriteLine("[M]edelvärde på temperatur");
                 Console.WriteLine("[A]vsluta programmet");
-                // sammankoppling behövs!
+                Console.WriteLine("");
+                string input = Console.ReadLine().ToUpper();
 
-                switch (Console.ReadKey().ToUpper) 
+                switch (input) 
                 {
-                    case 1: 
-                    // Lägg till mätning
-                    Console.Write("Vilken tempratur vill du lägga till i katalogen?");
-                    string readings = Console.ReadLine();
-                    double measurment = Convert.ToDouble(readings);
-                    tempratureMesh.Add(measurment);
-                    Console.WriteLine("Du har lagt till: " + measurment + " till katalogen");
-                    return true;
+                    case "L":
+                        // Lägg till mätning
+                        Console.Write("Vilken tempratur vill du lägga till i katalogen? ");
+                        string readings = Console.ReadLine();
+                        double measurment;
+                        try
+                        {
+                            measurment = Convert.ToDouble(readings);
+                        }
+                        catch (System.Exception)
+                        {
+                            Console.WriteLine("Vänligen använd siffror för dina mätningar!");
+                            Console.WriteLine("Ingen mätning tillagd");
+                            WaitForInput();
+                            break;
+                        }
+                        tempratureMesh.Add(measurment);
+                        Console.WriteLine("Du har lagt till: " + measurment + "C, till katalogen");
+                        WaitForInput();
+                        break;
 
-                    case 2:
+                    case "S" :
                     //Skriv ut alla mätningar
                     Console.WriteLine("Dina tempraturmätningar: ");
-                    Console.WriteLine(tempratureMesh);
-                    return true;
+                    foreach (double temp in tempratureMesh)
+                    {
+                        Console.WriteLine(temp + "C");
+                    }
+                    WaitForInput();
+                    break;
 
-                    case 3:
+                    case "M" :
                     // Medeltempratur
-                    AverageTemprature();
-                    return true;
+                       Console.WriteLine("Medel tempraturen är: " + AverageTemprature(tempratureMesh) + "C");
+                        WaitForInput();
+                    break;
 
-                    case 4:
+                    case "A" :
                     Console.WriteLine("Programmet stängs");
                     Environment.Exit(0);
-                    return false;
+                    break;
                     
                     default:
-                    Console.WriteLine("Vänligen välj ett av valen från menyn ovanför!"); // Kan göras tydligare
-                    return true;
+                    Console.WriteLine("Vänligen välj ett av valen från menyn ovanför!");
+                    WaitForInput();
+                    break;
                 }
             
             }
-            
-            static double AverageTemprature()
+        }
+        static double AverageTemprature(List<double> tempratureMesh)
+        {
+            double sum = 0;
+            for (int i = 0; i < tempratureMesh.Count; i++)
             {
-                double sum = 0.0f;
-                for (double i = 0; i < tempratureMesh.Count; i++)
-                {
-                    sum = sum + tempratureMesh[i];
-                }
-                Console.WriteLine("Medel tempraturen är: " + sum / tempratureMesh.Count);
+                sum = sum + tempratureMesh[i];
             }
-            // Lägg till mätning list<double>
-            // Skriv ut alla mätningar print list<>
-            // Medelvärde på tempraturer for loop sum / antal
-            // Avsluta System.Exit(o)
+            return sum / tempratureMesh.Count;
+        }
+
+        private static void WaitForInput()
+        {
+            Console.WriteLine("Tryck på valfri tangent för att gå till menyn");
+            Console.ReadKey();
         }
     }
 }
